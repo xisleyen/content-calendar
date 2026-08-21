@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Контент-календарь</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{--ground:#EFF1EE;--surface:#FFF;--surface-2:#F5F7F3;--ink:#14181A;--ink-2:#4E5759;--ink-3:#798385;--line:#D8DEDA;--line-2:#C3CBC6;--accent:#136E6C}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ground:#0F1413;--surface:#171C1B;--surface-2:#1D2322;--ink:#ECEFEA;--ink-2:#9DA7A4;--ink-3:#77817E;--line:#2B3331;--line-2:#3A4441;--accent:#54B7B0}}
+:root[data-theme="dark"]{--ground:#0F1413;--surface:#171C1B;--surface-2:#1D2322;--ink:#ECEFEA;--ink-2:#9DA7A4;--ink-3:#77817E;--line:#2B3331;--line-2:#3A4441;--accent:#54B7B0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:"Golos Text",system-ui,sans-serif;font-size:15px;line-height:1.5}
+.wrap{max-width:640px;margin:0 auto;padding:56px 20px 72px;display:flex;flex-direction:column;gap:24px}
+.eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:Literata,Georgia,serif;font-weight:600;font-size:clamp(26px,5vw,36px);line-height:1.1;margin:6px 0 0;letter-spacing:-.01em}
+p.sub{color:var(--ink-2);margin:0;max-width:56ch}
+.months{display:flex;flex-direction:column;gap:10px}
+a.m{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:16px 18px;border-radius:12px;background:var(--surface);border:1px solid var(--line);text-decoration:none;color:var(--ink);transition:border-color .15s,transform .15s}
+a.m:hover{border-color:var(--accent);transform:translateY(-1px)}
+.mn{font-family:Literata,serif;font-size:18px;font-weight:600}
+.ms{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.foot{color:var(--ink-3);font-size:13px;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Контент-завод</div>
+    <h1>Календарь публикаций</h1>
+  </header>
+  <p class="sub">Три аккаунта в одной ленте: Гид, Агентство, Измир. Внутри каждого дня лежат готовые тексты — слайды, скрипты, описания, посты.</p>
+  <div class="months"><a class="m" href="./2026-09.html"><span class="mn">Сентябрь 2026</span><span class="ms">текущий</span></a></div>
+  <p class="foot">Страница собирается из рабочих файлов и обновляется автоматически. Последний месяц — 2026-09.</p>
+</div>
+</body>
+</html>
