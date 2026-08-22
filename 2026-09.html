@@ -257,6 +257,8 @@ h1{
   border-radius:9px; border:1px solid var(--line); background:var(--surface-2); color:var(--ink-2);
 }
 .sheet-nav button:hover{border-color:var(--line-2); color:var(--ink)}
+.sheet-nav .yo{width:auto; padding:0 12px; font-size:12.5px}
+.sheet-nav .yo[aria-pressed="true"]{background:var(--ink); color:var(--ground); border-color:var(--ink)}
 .sheet-nav button:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
 .sheet-body{overflow-y:auto; padding:18px; scroll-padding-top:52px; display:flex; flex-direction:column; gap:22px}
 .acc-group{display:flex; flex-direction:column; gap:12px}
@@ -371,6 +373,7 @@ pre.txt{
 
   <section class="notes">
     <h3>Как этим пользоваться</h3>
+    <p>Кнопка «без ё» в шапке дня включена по умолчанию: на экране текст остаётся с ё, а в буфер уходит с обычной е — Bazaart и другие редакторы эту букву в некоторых шрифтах рисуют криво. Выключается тем же нажатием, выбор запоминается.</p>
     <p>Галочкой отмечаешь выложенное — блок «следующая публикация» сразу перескакивает дальше. Отметки живут только в этом браузере, для vault нужна команда <code>выложила 5 сентября</code> в чате.</p>
     <p>Telegram один на все три аккаунта — личный канал. Туда приземляются посты Гида и переупаковки Измира и Агентства, поэтому в плотные дни выходит по два-три TG-поста. Каждая IG-единица Измира и Агентства разворачивается в три подачи: IG → свой Threads → личный TG, это помечено чипом «+ Threads + TG».</p>
     <p>Все тексты месяца написаны у всех трёх аккаунтов. Пунктиром помечены слоты, где писатель ждёт от тебя одну деталь — они не блокируют публикацию. Резерв под ситуативное: 28–30 сентября у Измира, 29–30 у Агентства. Октября здесь пока нет.</p>
@@ -393,6 +396,7 @@ pre.txt{
         <h2 id="sheetTitle"></h2>
       </div>
       <div class="sheet-nav">
+        <button type="button" id="yoBtn" class="yo" aria-pressed="true" title="Копировать текст без буквы ё">без ё</button>
         <button type="button" id="prevDay" aria-label="Предыдущий день">←</button>
         <button type="button" id="nextDay" aria-label="Следующий день">→</button>
         <button type="button" data-close aria-label="Закрыть">✕</button>
@@ -667,6 +671,11 @@ document.getElementById("hideDone").addEventListener("click",function(){
   state.hideDone = !state.hideDone; this.setAttribute("aria-pressed", state.hideDone?"true":"false"); renderAll();
 });
 
+// ── подмена ё при копировании (Bazaart ломает эту букву в части шрифтов)
+let noYo = true;
+try{ const v = localStorage.getItem("kzp-noyo"); if(v !== null) noYo = v === "1"; }catch(e){}
+function prepare(t){ return noYo ? t.replace(/ё/g, "е").replace(/Ё/g, "Е") : t; }
+
 // ── тексты дня
 const DAYS = JSON.parse(document.getElementById("daytexts").textContent);
 const drawer = document.getElementById("drawer");
@@ -696,6 +705,16 @@ function stepDay(dir){
   }
 }
 drawer.addEventListener("click", ev => { if(ev.target.hasAttribute("data-close")) closeDay(); });
+(function(){
+  const y = document.getElementById("yoBtn");
+  y.setAttribute("aria-pressed", noYo ? "true" : "false");
+  y.addEventListener("click", () => {
+    noYo = !noYo;
+    y.setAttribute("aria-pressed", noYo ? "true" : "false");
+    try{ localStorage.setItem("kzp-noyo", noYo ? "1" : "0"); }catch(e){}
+    toast(noYo ? "Копирую без ё" : "Копирую как есть, с ё");
+  });
+})();
 document.getElementById("prevDay").addEventListener("click", () => stepDay(-1));
 document.getElementById("nextDay").addEventListener("click", () => stepDay(1));
 document.addEventListener("keydown", ev => {
@@ -712,11 +731,12 @@ function toast(msg){
   t.textContent = msg; t.classList.add("show");
   clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 1600);
 }
-function copyText(text, btn){
+function copyText(raw, btn){
+  const text = prepare(raw);
   const done = () => {
     if(btn){ const old = btn.textContent; btn.textContent = "скопировано"; btn.classList.add("ok");
       setTimeout(() => { btn.textContent = old; btn.classList.remove("ok"); }, 1400); }
-    toast("Текст скопирован");
+    toast(noYo ? "Скопировано, ё заменена на е" : "Текст скопирован");
   };
   const fallback = () => {
     const ta = document.createElement("textarea");
